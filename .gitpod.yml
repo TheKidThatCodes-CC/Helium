@@ -1,3 +1,4 @@
+
 image: gitpod/workspace-python-3.12
 
 # Commands that will run on workspace start
@@ -13,3 +14,10 @@ image: gitpod/workspace-python-3.12
 #       onOpen: open-preview
 #       name: Website
 #       description: Website Preview
+
+vscode:
+  extensions:
+    - ms-python.python
+    - sumneko.lua
+    - cschleiden.vscode-github-actions
+    - JackMacWindows.vscode-computercraft
