@@ -22,7 +22,8 @@ Operating data piece (odp)
     - sink[0x2]
       makes the value on top of the stack sink arg places or if the MSB of arg is on then it takes it to the place relative to the bottom
     - float[0x3]
-      makes the value at arg from the top (or bottom if MSB on) float to the top of the stack
+      makes the value at arg from the top (or bottom if MSB on) float to the top of the stack<br>
+      if multiple with same label makes them all float in their current order
     - lbl[0x4]<br>
       labels the top stack item with (wdp)
     - gl[0x5]<br>
