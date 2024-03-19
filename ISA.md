@@ -4,7 +4,7 @@ Sol, unlike lua, is purely stack based instead of register based. I will try to 
 Working data piece (wdp)
 Operating data piece (odp)
 
-### - **stk**  op[8bit] stk[8bit] {arg[8bit]}
+- ### **stk**  op[8bit] stk[8bit] {arg[8bit]}
   - op:
     - get[0x00]
       gets from top of stack and puts it into (wdp)<br>
@@ -44,7 +44,53 @@ Operating data piece (odp)
     all accessible things from parent w stacks (used for closures)
     - pis[0x06]<br>
     ps but i stacks
-### - **wdo** op[8bit]
+- ### **mdp** op[8bit]
   - op:
     - delete[0x00]
-    - [0x01]
+      <br>
+      deletes the current reference, if it is the last one then object is deleted
+    - deleteall [0x01]
+      <br>
+      deletes all references and object
+    - swap[0x02]
+      <br>
+      swaps wdp and odp
+    - unlink[0x03]
+      <br>
+      detatches object from all other references (essentially copy but whatever)
+- ### **ujmp** loc[exp(24bit)]
+  <br>
+  Jumps to instruction
+- ### **dsub** len[exp(24bit)]
+  <br>
+  defines a subroutine (function) len instructions long and places it on the stack, as well as removing the instructions that make up the function from the code, so watch out using jumps
+- ### **return**
+  returns the e stack and jumps back to after call
+- ### **call**
+  calls the function in wdp, inputting e stack
+- ### **sop** op[8bit]
+  does: wdp op odp. or if its unary it just does it on wdp
+  puts result on top of wstack
+  - op:
+    - add[0x00]
+    - sub[0x01]
+    - mult[0x02]
+    - div[0x03]
+    - modulo[0x04]
+    - unary negation[0x05]
+    - bitwise and[0x07]
+    - unary bitwise not[0x08]
+    - bitwise or[0x09]
+    - bitwise nand[0x0a]
+    - bitwise nor[0x0b]
+    - bitwise xor[0x0c]
+    - bitwise xnor[0x0d]
+- ### **const** typ[4bit] len[exp(16bit)+4bit]
+  reads len bytes after the instruction and puts it on w stack, then goes past any 0x00 s untill it gets to the next instruction
+  - typ:
+    - int[0x00] top bit is sign
+    - float[0x01] probably platform specific
+    - str[0x02] simple
+    - bool[0x03] first bit?
+- ### **exp** bytes[exp(8bit)]
+  makes the size of the exp() field in the next instruction bytes bytes long
