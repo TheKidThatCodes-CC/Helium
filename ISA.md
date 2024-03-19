@@ -4,8 +4,7 @@ Sol, unlike lua, is purely stack based instead of register based. I will try to 
 Working data piece (wdp)
 Operating data piece (odp)
 
-### - **stk**
-- op[8bit] stk[8bit] {arg[8bit]}
+### - **stk**  op[8bit] stk[8bit] {arg[8bit]}
   - op:
     - get[0x00]
       gets from top of stack and puts it into (wdp)<br>
@@ -38,11 +37,14 @@ Operating data piece (odp)
     - st[0x03]<br>
     substack tree<br>
     can only have pointers<br>
-    can only get and put, sink is delete top
+    can only get and put, sink is delete top,float delets everything above
     - cs[0x04]<br>
     current substack (from st)
     - ps[0x05]<br>
     all accessible things from parent w stacks (used for closures)
     - pis[0x06]<br>
     ps but i stacks
-
+### - **wdo** op[8bit]
+  - op:
+    - delete[0x00]
+    - [0x01]
