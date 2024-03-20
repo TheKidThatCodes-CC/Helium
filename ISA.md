@@ -30,19 +30,21 @@ Operating data piece (odp)
   - stk:
     - w[0x00]<br>
     the current working stack
-    - e[0x01]<br>
+    - sw[0x01]<br>
+    the secondairy working stack, only accessible from its own scope, does not pass to parent or child
+    - e[0x02]<br>
     the stack that is exported by return or calling a function
-    - i[0x02]<br>
+    - i[0x03]<br>
     the recived e stack
-    - st[0x03]<br>
+    - st[0x04]<br>
     substack tree<br>
     can only have pointers<br>
     can only get and put, sink is delete top,float delets everything above
-    - cs[0x04]<br>
+    - cs[0x05]<br>
     current substack (from st)
-    - ps[0x05]<br>
+    - ps[0x06]<br>
     all accessible things from parent w stacks (used for closures)
-    - pis[0x06]<br>
+    - pis[0x07]<br>
     ps but i stacks
 - ### **mdp** op[8bit]
   - op:
@@ -67,7 +69,7 @@ Operating data piece (odp)
 - ### **return**
   returns the e stack and jumps back to after call
 - ### **call**
-  calls the function in wdp, inputting e stack
+  takes the function, puts in in sw stack, then calls it
 - ### **sop** op[8bit]
   does: wdp op odp. or if its unary it just does it on wdp
   puts result on top of wstack
@@ -92,5 +94,6 @@ Operating data piece (odp)
     - float[0x01] probably platform specific
     - str[0x02] simple
     - bool[0x03] first bit?
+    - null/nil/none[0x04]
 - ### **exp** bytes[exp(8bit)]
-  makes the size of the exp() field in the next instruction bytes bytes long
+  makes the size of the exp() field in the next instruction bytes bytes long, this is a marker, not a actual instruction. this
