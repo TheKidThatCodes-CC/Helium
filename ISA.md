@@ -3,8 +3,8 @@ Sol, unlike lua, is purely stack based instead of register based. I will try to 
 
 Working data piece (wdp)
 Operating data piece (odp)
-
-- ### **stk**  op[8bit] stk[8bit] {arg[8bit]}
+instruction is 8bit, 0x00 does nothing, so instructions start at 0x01
+- ### **stk**[0x01]  op[8bit] stk[8bit] {arg[8bit]}
   - op:
     - get[0x00]
       gets from top of stack and puts it into (wdp)<br>
@@ -46,7 +46,7 @@ Operating data piece (odp)
     all accessible things from parent w stacks (used for closures)
     - pis[0x07]<br>
     ps but i stacks
-- ### **mdp** op[8bit]
+- ### **mdp**[0x02] op[8bit]
   - op:
     - delete[0x00]
       <br>
@@ -60,17 +60,17 @@ Operating data piece (odp)
     - unlink[0x03]
       <br>
       detatches object from all other references (essentially copy but whatever)
-- ### **ujmp** loc[exp(24bit)]
+- ### **ujmp**[0x03] loc[exp(24bit)]
   <br>
   Jumps to instruction
-- ### **dsub** len[exp(24bit)]
+- ### **dsub**[0x04] len[exp(24bit)]
   <br>
   defines a subroutine (function) len instructions long and places it on the stack, as well as removing the instructions that make up the function from the code, so watch out using jumps
-- ### **return**
+- ### **return**[0x05]
   returns the e stack and jumps back to after call
-- ### **call**
+- ### **call**[0x06]
   takes the function, puts in in sw stack, then calls it
-- ### **sop** op[8bit]
+- ### **sop**[0x07] op[8bit]
   does: wdp op odp. or if its unary it just does it on wdp
   puts result on top of wstack
   - op:
@@ -87,7 +87,7 @@ Operating data piece (odp)
     - bitwise nor[0x0b]
     - bitwise xor[0x0c]
     - bitwise xnor[0x0d]
-- ### **const** typ[4bit] len[exp(16bit)+4bit]
+- ### **const**[0x08] typ[4bit] len[exp(16bit)+4bit]
   reads len bytes after the instruction and puts it on w stack, then goes past any 0x00 s untill it gets to the next instruction
   - typ:
     - int[0x00] top bit is sign
@@ -95,5 +95,5 @@ Operating data piece (odp)
     - str[0x02] simple
     - bool[0x03] first bit?
     - null/nil/none[0x04]
-- ### **exp** bytes[exp(8bit)]
+- ### **exp**[0x09] bytes[exp(8bit)]
   makes the size of the exp() field in the next instruction bytes bytes long, this is a marker, not a actual instruction. this
