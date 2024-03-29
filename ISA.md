@@ -4,7 +4,9 @@ Sol, unlike lua, is purely stack based instead of register based. I will try to 
 Working data piece (wdp)
 Operating data piece (odp)
 instruction is 8bit, 0x00 does nothing, so instructions start at 0x01
-- ### **stk**[0x01]  op[8bit] stk[8bit] {arg[8bit]}
+
+
+- ### **stk**[0x01]  op[8bit] stk[8bit] arg[exp(8bit)]
   - op:
     - get[0x00]
       gets from top of stack and puts it into (wdp)<br>
@@ -19,9 +21,9 @@ instruction is 8bit, 0x00 does nothing, so instructions start at 0x01
       - 0x01: puts pointer on to stack
       - 0x02: copies onto stack
     - sink[0x2]
-      makes the value on top of the stack sink arg places or if the MSB of arg is on then it takes it to the place relative to the bottom
+      makes the value on top of the stack sink arg places or if arg is negative then it takes it to the place relative to the bottom
     - float[0x3]
-      makes the value at arg from the top (or bottom if MSB on) float to the top of the stack<br>
+      makes the value at arg from the top (or bottom if negative) float to the top of the stack<br>
       if multiple with same label makes them all float in their current order
     - lbl[0x4]<br>
       labels the top stack item with (wdp)
@@ -80,13 +82,16 @@ instruction is 8bit, 0x00 does nothing, so instructions start at 0x01
     - div[0x03]
     - modulo[0x04]
     - unary negation[0x05]
-    - bitwise and[0x07]
-    - unary bitwise not[0x08]
-    - bitwise or[0x09]
-    - bitwise nand[0x0a]
-    - bitwise nor[0x0b]
-    - bitwise xor[0x0c]
-    - bitwise xnor[0x0d]
+    - bitwise and[0x06]
+    - unary bitwise not[0x07]
+    - bitwise or[0x08]
+    - bitwise nand[0x09]
+    - bitwise nor[0x0a]
+    - bitwise xor[0x0b]
+    - bitwise xnor[0x0c]
+    - cast to number[0x0d]
+    - cast to string[0x0e]
+    - cast to boolean[0x0e]
 - ### **const**[0x08] typ[4bit] len[exp(16bit)+4bit]
   reads len bytes after the instruction and puts it on w stack, then goes past any 0x00 s untill it gets to the next instruction
   - typ:

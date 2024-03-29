@@ -21,3 +21,4 @@ vscode:
     - sumneko.lua
     - cschleiden.vscode-github-actions
     - JackMacWindows.vscode-computercraft
+    - franneck94.vscode-python-dev-extension-pack
