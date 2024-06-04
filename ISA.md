@@ -1,6 +1,11 @@
 # Instruction Set/Architecture
 Sol, unlike lua, is purely stack based instead of register based. I will try to keep this instruction set small so that it is easy to comprehend.
 
+file header is 16 bytes
+file starts with "\x1bSOL"
+version is next 4 bytes
+vm id is next 8
+
 Working data piece (wdp)
 Operating data piece (odp)
 
@@ -39,13 +44,16 @@ Operating data piece (odp)
     - st[0x04]<br>
     substack tree<br>
     can only have pointers<br>
-    can only get and put, sink is delete top,float delets everything above
+    can only get and put, can only hold one thing
     - cs[0x05]<br>
     current substack (from st)
     - ps[0x06]<br>
     all accessible things from parent w stacks (used for closures)
     - pis[0x07]<br>
     ps but i stacks
+    - pls[0x08]<br>
+    platform stack, aka all builtin functions/whatever
+    
 - ### **mdp** op[8bit]
   - op:
     - delete[0x00]
@@ -60,6 +68,9 @@ Operating data piece (odp)
     - unlink[0x03]
       <br>
       detatches object from all other references (essentially copy but whatever)
+    - setall[0x04]
+      <br>
+      sets all references of the value/pointer in wdp to the value/pointer from odp
 - ### **ujmp** loc[exp(24bit)]
   <br>
   Jumps to instruction
@@ -69,7 +80,7 @@ Operating data piece (odp)
 - ### **return**
   returns the e stack and jumps back to after call
 - ### **call**
-  takes the function, puts in in sw stack, then calls it
+  takes the function in wdp, puts it in sw stack, then calls it
 - ### **sop** op[8bit]
   does: wdp op odp. or if its unary it just does it on wdp
   puts result on top of wstack
@@ -87,13 +98,26 @@ Operating data piece (odp)
     - bitwise nor[0x0b]
     - bitwise xor[0x0c]
     - bitwise xnor[0x0d]
-- ### **const** typ[4bit] len[exp(16bit)+4bit]
+    - equivelent [0x0e]
+    - strict equals [0x0f]
+    - is (are they both pointer to same object) [0x10]
+    - gte [0x11]
+    - lte [0x12]
+    - gee [0x13]
+    - lee [0x14]
+    - gt [0x15]
+    - lt [0x16]
+    - ge [0x17]
+    - le [0x18]
+    - ne [0x19]
+    - nee [0x1a]
+- ### **const** typ[8bit] len[exp(16bit)]
   reads len bytes after the instruction and puts it on w stack, then goes past any 0x00 s untill it gets to the next instruction
   - typ:
     - int[0x00] top bit is sign
     - float[0x01] probably platform specific
     - str[0x02] simple
     - bool[0x03] first bit?
-    - null/nil/none[0x04]
+    - null/nil/none/void/whatever[0x04]
 - ### **exp** bytes[exp(8bit)]
-  makes the size of the exp() field in the next instruction bytes bytes long, this is a marker, not a actual instruction. this
+  adds to the the size of the exp() field in the next instruction bytes bytes long, this is a marker, not a actual instruction. this is not counted in the instruction list for jmps and whatever

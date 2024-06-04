@@ -7,3 +7,9 @@ authors = [
 description = "Helium Sol VM"
 readme = "README.md"
 requires-python = "~3.12"
+
+[tool.autopep8]
+max_line_length = 1200
+# in-place = true
+# recursive = true
+aggressive = 3
